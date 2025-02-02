@@ -6,8 +6,8 @@ class Notification(Base):
     __tablename__ = "notifications"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    message = Column(String)
-    notification_type = Column(String)  # email, websocket, etc.
-    created_at = Column(DateTime, default=datetime.utcnow)
-    status = Column(String, default="pending")  # sent, failed
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    message = Column(String, nullable=False)
+    notification_type = Column(String, nullable=False)  # email, websocket, etc.
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    status = Column(String, default="pending", nullable=False)  # sent, failed

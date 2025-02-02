@@ -3,6 +3,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from ..core.config import settings
 from ..core.database import SessionLocal
+from ..core.websocket_manager import manager
 from .models import Notification
 
 class NotificationService:
@@ -25,7 +26,6 @@ class NotificationService:
             raise e
     
     async def send_websocket_notification(self, user_id: int, message: str):
-        from ..core.websocket_manager import manager  # Fix circular import
         db = SessionLocal()
         try:
             await manager.send_personal_message(message, user_id)

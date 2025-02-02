@@ -5,12 +5,12 @@ from ..users.schemas import UserInDB
 class TaskBase(BaseModel):
     title: str
     description: str | None = None
-    deadline: datetime
+    deadline: datetime | None = None
     priority: str = "Medium"
     status: str = "Pending"
 
 class TaskCreate(TaskBase):
-    pass
+    owner_id: int
 
 class TaskResponse(TaskBase):
     id: int

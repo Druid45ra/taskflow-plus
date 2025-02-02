@@ -28,10 +28,9 @@ class WebSocketManager:
 
     async def broadcast(self, message: str, exclude_user_id: int = None):
         for user_id, connections in self.active_connections.items():
-            if user_id == exclude_user_id:
-                continue
-            for connection in connections:
-                await connection.send_text(message)
+            if user_id != exclude_user_id:
+                for connection in connections:
+                    await connection.send_text(message)
 
 # Inițializare manager global
 manager = WebSocketManager()

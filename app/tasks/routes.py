@@ -1,14 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException, WebSocket
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, Query, status
 from sqlalchemy.orm import Session
 from ..core.database import get_db
 from . import schemas, models
 from ..users.models import User
 from ..notifications.services import NotificationService
-from fastapi import APIRouter, Depends, WebSocket, Query
 from ..core.websocket_manager import manager
 from ..core.security import verify_jwt_token
 from ..core.config import settings
 from ..tasks import services  # Ensure services is imported
+
+router = APIRouter(prefix="/tasks", tags=["tasks"])
+notification_service = NotificationService()
 
 @router.websocket("/ws")
 async def websocket_endpoint(
@@ -25,45 +27,26 @@ async def websocket_endpoint(
     await manager.connect(websocket, user_id)
     try:
         while True:
-            # Păstrează conexiunea deschisă cu un heartbeat
+            # Keep the connection open with a heartbeat
             await websocket.receive_text()
     except:
         manager.disconnect(websocket, user_id)
 
 @router.post("/", response_model=schemas.TaskResponse)
 async def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
-    db_task = models.Task(**task.dict())
-    db.add(db_task)
-    db.commit()
-    db.refresh(db_task)
+    user = db.query(User).filter(User.id == task.owner_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     
-    # Send notifications
-    notification_service = NotificationService()
-    await notification_service.send_websocket_notification(
-        user_id=db_task.owner_id,
-        message=f"New task created: {db_task.title}"
+    new_task = models.Task(**task.dict())
+    db.add(new_task)
+    db.commit()
+    db.refresh(new_task)
+    
+    await notification_service.send_email(
+        to_email=user.email,
+        subject="New Task Created",
+        content=f"Task '{new_task.title}' has been created."
     )
     
-    # Send email (example)
-    user = db.query(User).filter(User.id == db_task.owner_id).first()
-    if user:
-        await notification_service.send_email(
-            to_email=user.email,
-            subject="New Task Assigned",
-            content=f"You have a new task: {db_task.title}"
-        )
-    
-    # Send task update and broadcast
-    task_data = schemas.TaskResponse.from_orm(db_task).dict()
-    await services.send_task_update(task_data, db_task.owner_id)
-    await services.broadcast_task_creation(task_data)
-    
-    return db_task
-
-router = APIRouter(prefix="/tasks", tags=["tasks"])
-active_connections = []
-
-# Funcție helper pentru broadcast mesaje
-async def broadcast(message: str):
-    for connection in active_connections:
-        await connection.send_text(message)
+    return new_task

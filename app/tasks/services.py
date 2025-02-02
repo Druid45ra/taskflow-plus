@@ -1,4 +1,4 @@
-import json  # New import
+import json
 from ..core.websocket_manager import manager
 
 async def send_task_update(task_data: dict, user_id: int):

@@ -9,7 +9,7 @@ def create_jwt_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     expires = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
     to_encode.update({"exp": expires})
-    return jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+    return jwt.encode(to_encode, settings.sendgrid_api_key, algorithm="HS256")
 
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)

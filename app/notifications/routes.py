@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from datetime import datetime
 from ..core.database import get_db
 from . import schemas, models
 from .services import NotificationService
@@ -18,7 +19,17 @@ async def send_email_notification(email_data: schemas.NotificationCreate, db: Se
         subject="New Notification",
         content=f"<strong>{email_data.message}</strong>"
     )
-    return {"id": 1, "created_at": datetime.now(), "status": "sent", "user_id": email_data.user_id}  # Example response
+    notification = models.Notification(
+        user_id=email_data.user_id,
+        message=email_data.message,
+        notification_type="email",
+        created_at=datetime.utcnow(),
+        status="sent"
+    )
+    db.add(notification)
+    db.commit()
+    db.refresh(notification)
+    return notification
 
 @router.get("/user/{user_id}", response_model=list[schemas.NotificationResponse])
 def get_user_notifications(user_id: int, db: Session = Depends(get_db)):

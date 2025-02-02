@@ -16,7 +16,7 @@ class Settings(BaseSettings):
             if config_path.exists():
                 with open(config_path) as f:
                     config_data = json.load(f)
-                return init_settings, env_settings, lambda: config_data
-            return init_settings, env_settings
+                return init_settings, env_settings, lambda: config_data, file_secret_settings
+            return init_settings, env_settings, file_secret_settings
 
 settings = Settings()

@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from ..core.database import SessionLocal
+from ..core.database import get_db, SessionLocal
 from . import schemas, models
-from ..core.security import get_password_hash, create_jwt_token
+from ..core.security import get_password_hash, verify_password, create_jwt_token
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-# Dependency
 def get_db():
     db = SessionLocal()
     try:
