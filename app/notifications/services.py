@@ -25,13 +25,10 @@ class NotificationService:
             raise e
     
     async def send_websocket_notification(self, user_id: int, message: str):
-        from ..tasks.routes import active_connections  # Import circular gestionat
+        from ..core.websocket_manager import manager  # Fix circular import
         db = SessionLocal()
         try:
-            # Trimite mesajul la toate conexiunile active ale user-ului
-            for ws in active_connections:
-                if ws.user_id == user_id:  # Presupunem că conexiunile WebSocket au user_id
-                    await ws.send_text(message)
+            await manager.send_personal_message(message, user_id)
             self._log_notification(user_id, "websocket", "sent")
         except Exception as e:
             self._log_notification(user_id, "websocket", "failed", str(e))

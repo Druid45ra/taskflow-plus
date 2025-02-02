@@ -3,13 +3,13 @@ from pathlib import Path
 from pydantic import BaseSettings, AnyUrl
 
 class Settings(BaseSettings):
-    # ... (existing settings)
+    # ...existing settings...
     email_sender: str = "noreply@taskflow.com"
     sendgrid_api_key: str = "your_sendgrid_key_here"
     
     class Config:
         env_file = ".env"
-        # Încarcă și din config.json dacă există
+        # Load from config.json if exists
         @classmethod
         def customise_sources(cls, init_settings, env_settings, file_secret_settings):
             config_path = Path("config.json")

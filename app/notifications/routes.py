@@ -18,7 +18,7 @@ async def send_email_notification(email_data: schemas.NotificationCreate, db: Se
         subject="New Notification",
         content=f"<strong>{email_data.message}</strong>"
     )
-    return {"message": "Email sent successfully"}
+    return {"id": 1, "created_at": datetime.now(), "status": "sent", "user_id": email_data.user_id}  # Example response
 
 @router.get("/user/{user_id}", response_model=list[schemas.NotificationResponse])
 def get_user_notifications(user_id: int, db: Session = Depends(get_db)):

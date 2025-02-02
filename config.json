@@ -6,10 +6,7 @@
             "client_secret": "your_google_secret"
         }
     },
-    "default_task_priority": "Medium"
-}
-
-{
+    "default_task_priority": "Medium",
     "email_sender": "your_email@domain.com",
     "sendgrid_api_key": "SG.your_api_key_here"
 }

@@ -9,6 +9,7 @@ class WebSocketManager:
         self.active_connections: dict[int, list[WebSocket]] = {}
 
     async def connect(self, websocket: WebSocket, user_id: int):
+        websocket.user_id = user_id  # Ensure user_id is set
         await websocket.accept()
         if user_id not in self.active_connections:
             self.active_connections[user_id] = []
