@@ -3,11 +3,9 @@ from pathlib import Path
 from pydantic import BaseSettings, AnyUrl
 
 class Settings(BaseSettings):
-    # Citeste din .env sau config.json
-    database_url: AnyUrl = "sqlite:///./taskflow.db"
-    jwt_secret: str = "secret_key_123"
-    jwt_algorithm: str = "HS256"
-    oauth_providers: dict = {}
+    # ... (existing settings)
+    email_sender: str = "noreply@taskflow.com"
+    sendgrid_api_key: str = "your_sendgrid_key_here"
     
     class Config:
         env_file = ".env"

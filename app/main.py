@@ -3,7 +3,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.users import routes as user_routes
 from app.tasks import routes as task_routes
 from app.core.database import Base, engine
+from starlette.websockets import WebSocketDisconnect
 
+@app.websocket("/ws/status")
+async def system_status_websocket(websocket: WebSocket):
+    # Exemplu: Endpoint pentru admini cu verificare suplimentară
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_json()
+            # Logica custom
+    except WebSocketDisconnect:
+        pass
+    
 # Creează toate tabelele în baza de date
 Base.metadata.create_all(bind=engine)
 
