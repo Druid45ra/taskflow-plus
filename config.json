@@ -1,0 +1,10 @@
+{
+    "jwt_secret": "secret_key_here",
+    "oauth_providers": {
+        "google": {
+            "client_id": "your_google_client_id",
+            "client_secret": "your_google_secret"
+        }
+    },
+    "default_task_priority": "Medium"
+}
