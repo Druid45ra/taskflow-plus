@@ -4,7 +4,9 @@ from pydantic_settings import BaseSettings
 from pydantic import AnyUrl
 
 class Settings(BaseSettings):
-    # ...existing settings...
+    database_url: str = "sqlite:///./taskflow.db"
+    jwt_secret: str = "super_secret_key_123"
+    jwt_algorithm: str = "HS256"
     email_sender: str = "noreply@taskflow.com"
     sendgrid_api_key: str = "your_sendgrid_key_here"
     
