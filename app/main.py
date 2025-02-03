@@ -7,6 +7,7 @@ from app.tasks import tasks as task_routes
 
 app = FastAPI()
 
+
 @app.websocket("/ws/status")
 async def system_status_websocket(websocket: WebSocket):
     await websocket.accept()
@@ -16,6 +17,7 @@ async def system_status_websocket(websocket: WebSocket):
             # Custom logic
     except WebSocketDisconnect:
         pass
+
 
 # Create all tables in the database
 Base.metadata.create_all(bind=engine)
@@ -32,6 +34,7 @@ app.add_middleware(
 # Include routes
 app.include_router(user_routes.router)
 app.include_router(task_routes.router)
+
 
 @app.get("/")
 def root():
