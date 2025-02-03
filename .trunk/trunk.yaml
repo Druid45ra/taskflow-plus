@@ -1,0 +1,11 @@
+# This file controls the behavior of Trunk: https://docs.trunk.io/cli
+# To learn more about the format of this file, see https://docs.trunk.io/reference/trunk-yaml
+version: 0.1
+cli:
+  version: 1.22.9
+
+description: |
+  Taskflow Plus is a task management application built with FastAPI, SQLAlchemy, and WebSockets. 
+  It allows users to create, update, and manage tasks, and provides real-time notifications via 
+  email and WebSockets. The project includes user authentication, role-based access control, and 
+  a comprehensive API for managing tasks and notifications.
