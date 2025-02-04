@@ -1,4 +1,4 @@
-# Taskflow Plus
+à# Taskflow Plus
 
 Taskflow Plus is a task management application built with FastAPI, SQLAlchemy, and WebSockets. It allows users to create, update, and manage tasks, and provides real-time notifications via email and WebSockets.
 
@@ -14,7 +14,7 @@ Taskflow Plus is a task management application built with FastAPI, SQLAlchemy, a
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/taskflow-plus.git
+    git clone https://github.com/Druid45ra/taskflow-plus.git
     cd taskflow-plus
     ```
 
